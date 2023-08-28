@@ -4,9 +4,7 @@ import { useForm } from "react-hook-form";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 
-interface AddContainerFormProps {}
-
-export const AddContainerForm: React.FC<AddContainerFormProps> = ({}) => {
+export const AddContainerForm: React.FC = ({}) => {
   const router = useRouter();
   const { mutateAsync: createContainer, isLoading } =
     api.container.create.useMutation({
@@ -16,7 +14,7 @@ export const AddContainerForm: React.FC<AddContainerFormProps> = ({}) => {
     });
   const { register, handleSubmit } = useForm<{ name: string; type: string }>();
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: { type: string; name: string }) => {
     await createContainer(values);
   };
 

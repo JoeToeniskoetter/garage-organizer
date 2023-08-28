@@ -6,7 +6,11 @@ import { api } from "~/utils/api";
 interface AddContainerItemModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (values: any) => Promise<void>;
+  onCreate: (values: {
+    imageData: string;
+    name: string;
+    containerId: number;
+  }) => Promise<void>;
   containerId: number;
 }
 

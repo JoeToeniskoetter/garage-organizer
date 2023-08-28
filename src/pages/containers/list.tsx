@@ -6,9 +6,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { MobileNavHeader } from "../components/MobileNavHeader";
 import { Spinner } from "flowbite-react";
 
-interface listProps {}
-
-export const list: React.FC<listProps> = ({}) => {
+export const list: React.FC = ({}) => {
   const { data, isLoading } = api.container.getAll.useQuery();
 
   if (isLoading) {

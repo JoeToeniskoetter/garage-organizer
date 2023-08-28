@@ -8,8 +8,6 @@ import { MobileNavHeader } from "../components/MobileNavHeader";
 import { AddContainerItemModal } from "../components/AddContainerItemModal";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface ContainerProps {}
-
 function getExtFromBase64(base64Data: string) {
   return base64Data.substring(
     "data:image/".length,
@@ -17,7 +15,7 @@ function getExtFromBase64(base64Data: string) {
   );
 }
 
-export const Container: React.FC<ContainerProps> = ({}) => {
+export const Container: React.FC = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const {
     query: { id },
