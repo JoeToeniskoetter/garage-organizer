@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
-interface MainLayoutProps {}
-
-export const MainLayout: React.FC<MainLayoutProps> = ({}) => {
+export const MainLayout: React.FC = ({}) => {
   const { data } = useSession();
   const { route } = useRouter();
   return (
