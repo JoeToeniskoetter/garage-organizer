@@ -14,15 +14,16 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
-// import { Client } from "minio";
-// import { env } from "~/env.mjs";
+import { Client } from "minio";
+import { env } from "~/env.mjs";
 
-// const minioClient = new Client({
-//   endPoint: "nyc3.digitaloceanspaces.com",
-//   useSSL: true,
-//   accessKey: env.MINIO_ACCESS_KEY,
-//   secretKey: env.MINIO_SECRET_KEY,
-// });
+const minioClient = new Client({
+  endPoint: env.MINIO_ENDPOINT,
+  useSSL: env.NODE_ENV !== "development" ? true : false,
+  port: env.NODE_ENV !== "development" ? 443 : 9000,
+  accessKey: env.MINIO_ACCESS_KEY,
+  secretKey: env.MINIO_SECRET_KEY,
+});
 
 /**
  * 1. CONTEXT
@@ -50,7 +51,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    // s3: minioClient,
+    s3: minioClient,
   };
 };
 

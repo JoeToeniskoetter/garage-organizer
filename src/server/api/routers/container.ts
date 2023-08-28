@@ -1,19 +1,40 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { env } from "~/env.mjs";
 
 export const containerRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.container.findMany({
+      where: { userId: ctx.session.user.id },
       include: { items: true },
     });
   }),
   byId: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
-      return await ctx.prisma.container.findFirst({
-        where: { id: input.id },
+      const container = await ctx.prisma.container.findFirst({
+        where: { id: input.id, userId: ctx.session.user.id },
         include: { items: true },
       });
+
+      if (container?.items) {
+        const items = await Promise.all(
+          container.items.map(async (item) => {
+            if (item.imageData) {
+              return {
+                ...item,
+                imageData: await ctx.s3.presignedGetObject(
+                  env.MINIO_BUCKET,
+                  item.imageData
+                ),
+              };
+            }
+            return item;
+          })
+        );
+        return { ...container, items };
+      }
+      return container;
     }),
   create: protectedProcedure
     .input(
@@ -21,7 +42,7 @@ export const containerRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       return await ctx.prisma.container.create({
-        data: input,
+        data: { ...input, userId: ctx.session.user.id },
       });
     }),
   delete: protectedProcedure

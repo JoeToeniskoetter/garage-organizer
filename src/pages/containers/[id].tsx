@@ -6,44 +6,26 @@ import { useReactToPrint } from "react-to-print";
 import { api } from "~/utils/api";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { AddContainerItemModal } from "../../components/AddContainerItemModal";
-import { useQueryClient } from "@tanstack/react-query";
-
-function getExtFromBase64(base64Data: string) {
-  return base64Data.substring(
-    "data:image/".length,
-    base64Data.indexOf(";base64")
-  );
-}
+import { Spinner } from "flowbite-react";
 
 export const Container: React.FC = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const {
     query: { id },
   } = useRouter();
-  const queryClient = useQueryClient();
   const { data, isLoading } = api.container.byId.useQuery(
     { id: Number(id) },
     { enabled: id !== undefined }
   );
-  const { mutateAsync } = api.containerItem.create.useMutation();
-  const { mutateAsync: getUrl } = api.upload.getPresignedUrl.useMutation();
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  const createItem = async (values: {
-    containerId: number;
-    imageData: string;
-    name: string;
-  }) => {
-    await mutateAsync({
-      containerId: values.containerId,
-      imageData: values.imageData ? values.imageData.toString() : undefined,
-      name: values.name,
-    });
-  };
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <div className="m-4">
       <MobileNavHeader title={data?.name ?? ""} />
@@ -109,10 +91,6 @@ export const Container: React.FC = ({}) => {
         <AddContainerItemModal
           open={openModal}
           onClose={() => {
-            setOpenModal(false);
-          }}
-          onCreate={async (values) => {
-            await createItem(values);
             setOpenModal(false);
           }}
           containerId={Number(id)}

@@ -25,6 +25,12 @@ const config = {
         port: "9000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "nyc3.digitaloceanspaces.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

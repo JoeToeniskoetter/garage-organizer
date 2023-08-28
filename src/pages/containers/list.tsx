@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { api } from "~/utils/api";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { Spinner } from "flowbite-react";
 
@@ -19,11 +20,17 @@ export const list: React.FC = ({}) => {
 
   return (
     <div className="m-4 flex flex-col">
-      <MobileNavHeader title="Containers" canGoBack={false} />
+      <MobileNavHeader title="My Containers" canGoBack={false} />
+      {data?.length == 0 && (
+        <div className="flex h-screen flex-col items-center justify-center">
+          <ExclamationTriangleIcon className="h-10 w-10" />
+          <p>No Containers found. Add one here</p>
+        </div>
+      )}
       {data?.map((container) => {
         return (
           <Link key={container.id} href={`/containers/${container.id}`}>
-            <div className="max-w-sm overflow-hidden rounded shadow-lg">
+            <div className="max-w-lg overflow-hidden rounded shadow-lg">
               <div className="flex items-center gap-4 p-8">
                 <div className="flex w-1/2 items-center justify-center">
                   <Image

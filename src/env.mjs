@@ -24,8 +24,10 @@ export const env = createEnv({
     AUTH0_CLIENT_ID: z.string(),
     AUTH0_CLIENT_SECRET: z.string(),
     AUTH0_DOMAIN: z.string(),
-    // MINIO_ACCESS_KEY: z.string(),
-    // MINIO_SECRET_KEY: z.string(),
+    MINIO_ACCESS_KEY: z.string(),
+    MINIO_SECRET_KEY: z.string(),
+    MINIO_ENDPOINT: z.string(),
+    MINIO_BUCKET: z.string(),
   },
 
   /**
@@ -34,6 +36,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_NODE_ENV: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
   },
 
@@ -49,8 +52,11 @@ export const env = createEnv({
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
     AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-    // MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
-    // MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
+    MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
+    MINIO_BUCKET: process.env.MINIO_BUCKET,
+    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
