@@ -4,8 +4,8 @@ import React, { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { useReactToPrint } from "react-to-print";
 import { api } from "~/utils/api";
-import { MobileNavHeader } from "../components/MobileNavHeader";
-import { AddContainerItemModal } from "../components/AddContainerItemModal";
+import { MobileNavHeader } from "../../components/MobileNavHeader";
+import { AddContainerItemModal } from "../../components/AddContainerItemModal";
 import { useQueryClient } from "@tanstack/react-query";
 
 function getExtFromBase64(base64Data: string) {

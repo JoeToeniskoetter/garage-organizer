@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { api } from "~/utils/api";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import { MobileNavHeader } from "../components/MobileNavHeader";
+import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { Spinner } from "flowbite-react";
 
 export const list: React.FC = ({}) => {

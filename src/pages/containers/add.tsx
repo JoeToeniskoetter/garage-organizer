@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { MobileNavHeader } from "../components/MobileNavHeader";
-import { AddContainerForm } from "../components/AddContainerForm";
+import { MobileNavHeader } from "../../components/MobileNavHeader";
+import { AddContainerForm } from "../../components/AddContainerForm";
 
 export default function addPage() {
   return (
