@@ -28,8 +28,9 @@ export const containerItemRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ id: z.string().nonempty() }))
     .mutation(async ({ input, ctx }) => {
-      return await ctx.prisma.containerItem.delete({
+      return await ctx.prisma.containerItem.update({
         where: { id: input.id },
+        data: { deletedAt: new Date() },
       });
     }),
 });

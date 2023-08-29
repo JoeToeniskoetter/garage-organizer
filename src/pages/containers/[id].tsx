@@ -7,9 +7,12 @@ import { api } from "~/utils/api";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { AddContainerItemModal } from "../../components/AddContainerItemModal";
 import { Spinner } from "flowbite-react";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Container: React.FC = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const {
     query: { id },
   } = useRouter();
@@ -17,6 +20,14 @@ export const Container: React.FC = ({}) => {
     { id: Number(id) },
     { enabled: id !== undefined }
   );
+  const { mutateAsync } = api.containerItem.delete.useMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([
+        ["container", "byId"],
+        { input: { id: Number(id) }, type: "query" },
+      ]);
+    },
+  });
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
@@ -34,7 +45,7 @@ export const Container: React.FC = ({}) => {
           <QRCode
             size={100}
             style={{ height: "auto" }}
-            value={`http://localhost:3000/containers/cllsgpl9t0000m3x2o1h9vpu2`}
+            value={`/containers/${id?.toString()}`}
             viewBox={`0 0 256 256`}
           />
         </div>
@@ -57,18 +68,31 @@ export const Container: React.FC = ({}) => {
       <div className="flex flex-col gap-2">
         {data?.items?.map((item) => {
           return (
-            <div className="flex rounded-xl p-4 shadow-md" key={item.id}>
-              {item.imageData && (
-                <Image
-                  src={item.imageData}
-                  height={50}
-                  width={50}
-                  alt="item"
-                  className="rounded-l-xl"
-                />
-              )}
-              <div className="p-4">
-                <p className="text-xl">{item.name}</p>
+            <div
+              className="flex justify-between rounded-xl p-4 shadow-md"
+              key={item.id}
+            >
+              <div className="flex">
+                {item.imageData && (
+                  <Image
+                    src={item.imageData}
+                    height={80}
+                    width={80}
+                    alt="item"
+                    // className="rounded-l-xl"
+                  />
+                )}
+                <div className="p-4">
+                  <p className="text-xl">{item.name}</p>
+                </div>
+              </div>
+              <div
+                className="flex cursor-pointer items-center pr-4"
+                onClick={async () => {
+                  await mutateAsync({ id: item.id });
+                }}
+              >
+                <TrashIcon className="h-8 w-8 text-red-500" />
               </div>
             </div>
           );
@@ -79,7 +103,7 @@ export const Container: React.FC = ({}) => {
           <QRCode
             size={256}
             style={{ height: "auto", width: "100%" }}
-            value={`http://localhost:3000/containers/${id?.toString()}`}
+            value={`/containers/${id?.toString()}`}
             viewBox={`0 0 256 256`}
           />
           <div className="flex items-center p-4">

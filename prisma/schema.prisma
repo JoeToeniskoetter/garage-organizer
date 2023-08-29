@@ -81,4 +81,5 @@ model ContainerItem {
     imageData   String?
     containerId Int
     container   Container @relation(fields: [containerId], references: [id])
+    deletedAt   DateTime?
 }

@@ -1,13 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { api } from "~/utils/api";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { HiSearch } from "react-icons/hi";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
-import { Spinner } from "flowbite-react";
+import { Spinner, TextInput } from "flowbite-react";
+import { ContainerCard } from "~/components/ContainerCard";
 
-export const list: React.FC = ({}) => {
+export const List: React.FC = ({}) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, isLoading } = api.container.getAll.useQuery();
 
   if (isLoading) {
@@ -19,52 +21,41 @@ export const list: React.FC = ({}) => {
   }
 
   return (
-    <div className="m-4 flex flex-col">
-      <MobileNavHeader title="My Containers" canGoBack={false} />
-      {data?.length == 0 && (
-        <div className="flex h-screen flex-col items-center justify-center">
-          <ExclamationTriangleIcon className="h-10 w-10" />
-          <p>No Containers found. Add one here</p>
-        </div>
-      )}
-      {data?.map((container) => {
-        return (
-          <Link key={container.id} href={`/containers/${container.id}`}>
-            <div className="max-w-lg overflow-hidden rounded shadow-lg">
-              <div className="flex items-center gap-4 p-8">
-                <div className="flex w-1/2 items-center justify-center">
-                  <Image
-                    src={
-                      container.type.toLowerCase().includes("cardboard")
-                        ? "/thd-cardboard-box.jpeg"
-                        : "/hdx-container.jpg"
-                    }
-                    alt="Sunset in the mountains"
-                    width={150}
-                    height={150}
-                  />
-                </div>
-                <div className="mb-2 flex w-full flex-col text-xl font-bold">
-                  {container.name}
-                  <div>
-                    <p className="text-sm font-light text-gray-400">
-                      Type: {container.type}
-                    </p>
-                    <p className="text-sm font-light text-gray-400">
-                      Item Count: {container.items.length}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
-        );
-      })}
-      <Link href={"/containers/add"}>
-        <PlusCircleIcon className="fixed bottom-3 right-5 h-16 w-16 rounded-xl text-blue-500" />
-      </Link>
-    </div>
+    <>
+      <div className="m-4 flex flex-col">
+        <MobileNavHeader title="My Containers" canGoBack={false} showScan />
+        <TextInput
+          value={searchTerm}
+          className="flex w-full min-w-full"
+          icon={HiSearch}
+          placeholder="Search for an item"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="m-4">
+        {data?.length == 0 && (
+          <div className="flex h-screen flex-col items-center justify-center">
+            <ExclamationTriangleIcon className="h-10 w-10" />
+            <p>No Containers found. Add one here</p>
+          </div>
+        )}
+        {data
+          ?.filter((c) => {
+            const term = searchTerm.trim().toLowerCase();
+            if (term !== "") {
+              return c.items.some((i) => i.name.toLowerCase().includes(term));
+            }
+            return c;
+          })
+          .map((container) => {
+            return <ContainerCard key={container.id} container={container} />;
+          })}
+        <Link href={"/containers/add"}>
+          <PlusCircleIcon className="fixed bottom-3 right-5 h-16 w-16 rounded-xl text-orange-500" />
+        </Link>
+      </div>
+    </>
   );
 };
 
-export default list;
+export default List;

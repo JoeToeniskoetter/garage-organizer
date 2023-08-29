@@ -6,7 +6,7 @@ export const containerRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.container.findMany({
       where: { userId: ctx.session.user.id },
-      include: { items: true },
+      include: { items: { where: { deletedAt: null } } },
     });
   }),
   byId: protectedProcedure
@@ -14,7 +14,7 @@ export const containerRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const container = await ctx.prisma.container.findFirst({
         where: { id: input.id, userId: ctx.session.user.id },
-        include: { items: true },
+        include: { items: { where: { deletedAt: null } } },
       });
 
       if (container?.items) {
@@ -41,6 +41,9 @@ export const containerRouter = createTRPCRouter({
       z.object({ name: z.string().nonempty(), type: z.string().nonempty() })
     )
     .mutation(async ({ input, ctx }) => {
+      const maxContainerNumber = await ctx.prisma.container.aggregate({
+        _max: { id: true },
+      });
       return await ctx.prisma.container.create({
         data: { ...input, userId: ctx.session.user.id },
       });
