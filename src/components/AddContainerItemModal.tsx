@@ -100,7 +100,6 @@ export const AddContainerItemModal: React.FC<AddContainerItemModalProps> = ({
       });
     } catch (e: unknown) {
       alert("Failed to create item");
-      alert(e.message);
     } finally {
       reset({ name: "", imageData: undefined, containerId: containerId });
       onClose();
