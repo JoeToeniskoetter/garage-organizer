@@ -1,5 +1,5 @@
 import { ArrowLeftCircleIcon, QrCodeIcon } from "@heroicons/react/24/solid";
-import { Button } from "flowbite-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -29,10 +29,12 @@ export const MobileNavHeader: React.FC<MobileNavHeaderProps> = ({
       )}
       <p className="text-2xl font-bold">{title}</p>
       {showScan && (
-        <button className="flex items-center justify-center gap-2 self-end rounded-xl border border-blue-600 p-2 text-blue-600">
-          <QrCodeIcon className="h-5 w-5" />
-          Scan
-        </button>
+        <Link href={"/containers/scan"}>
+          <button className="flex items-center justify-center gap-2 self-end rounded-xl border border-blue-600 p-2 text-blue-600">
+            <QrCodeIcon className="h-5 w-5" />
+            Scan
+          </button>
+        </Link>
       )}
     </div>
   );

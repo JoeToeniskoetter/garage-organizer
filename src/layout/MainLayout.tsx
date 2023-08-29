@@ -1,5 +1,5 @@
 import { Button, Navbar } from "flowbite-react";
-import { useSession } from "next-auth/react";
+import { signOut, signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -15,7 +15,11 @@ export const MainLayout: React.FC = ({}) => {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        {data ? <Button>Sign Out</Button> : <Button>Sign In</Button>}
+        {data ? (
+          <Button onClick={signOut}>Sign Out</Button>
+        ) : (
+          <Button onClick={signIn}>Sign In</Button>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
