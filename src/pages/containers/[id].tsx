@@ -6,7 +6,7 @@ import { useReactToPrint } from "react-to-print";
 import { api } from "~/utils/api";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { AddContainerItemModal } from "../../components/AddContainerItemModal";
-import { Spinner } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -28,6 +28,10 @@ export const Container: React.FC = ({}) => {
       ]);
     },
   });
+
+  const addItem = async (id: string) => {
+    await mutateAsync({ id: id });
+  };
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
@@ -86,14 +90,14 @@ export const Container: React.FC = ({}) => {
                   <p className="text-xl">{item.name}</p>
                 </div>
               </div>
-              <div
-                className="flex cursor-pointer items-center pr-4"
-                onClick={async () => {
-                  await mutateAsync({ id: item.id });
-                }}
+              <Button
+                color="light"
+                className="m-0 flex items-center border-0 bg-transparent"
+                onClick={() => addItem(item.id)}
+                outlined
               >
                 <TrashIcon className="h-8 w-8 text-red-500" />
-              </div>
+              </Button>
             </div>
           );
         })}
