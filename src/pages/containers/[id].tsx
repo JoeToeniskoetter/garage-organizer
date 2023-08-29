@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import Image from "next/image";
 import React, { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { useReactToPrint } from "react-to-print";
 import { api } from "~/utils/api";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { AddContainerItemModal } from "../../components/AddContainerItemModal";
-import { Button, Spinner } from "flowbite-react";
-import { TrashIcon } from "@heroicons/react/24/outline";
 import { useQueryClient } from "@tanstack/react-query";
+import { ContainerItemRow } from "~/components/ContainerItemRow";
+import { Spinner } from "flowbite-react";
+import { PrinterIcon } from "@heroicons/react/24/outline";
 
 export const Container: React.FC = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -29,7 +29,7 @@ export const Container: React.FC = ({}) => {
     },
   });
 
-  const addItem = async (id: string) => {
+  const deleteItem = async (id: string) => {
     await mutateAsync({ id: id });
   };
 
@@ -44,21 +44,16 @@ export const Container: React.FC = ({}) => {
   return (
     <div className="m-4">
       <MobileNavHeader title={data?.name ?? ""} />
-      <div className="flex flex-row items-center justify-between p-2">
-        <div>
-          <QRCode
-            size={100}
-            style={{ height: "auto" }}
-            value={`/containers/${id?.toString()}`}
-            viewBox={`0 0 256 256`}
-          />
+      <div className="flex items-center justify-center p-2">
+        <div className="flex flex-col gap-2">
+          <QRCode size={150} value={`/containers/${id?.toString()}`} />
+          <button
+            onClick={handlePrint}
+            className="flex gap-2 rounded-xl bg-green-700 p-2 text-white shadow-md"
+          >
+            <PrinterIcon className="h-5 w-5" /> Print QR Code
+          </button>
         </div>
-        <button
-          onClick={handlePrint}
-          className="rounded-xl bg-green-700 p-2 text-white shadow-md"
-        >
-          Print QR Code
-        </button>
       </div>
       <div className="flex justify-between border-b-2 p-4">
         <p className="text-lg font-bold">Items</p>
@@ -72,33 +67,7 @@ export const Container: React.FC = ({}) => {
       <div className="flex flex-col gap-2">
         {data?.items?.map((item) => {
           return (
-            <div
-              className="flex justify-between rounded-xl p-4 shadow-md"
-              key={item.id}
-            >
-              <div className="flex">
-                {item.imageData && (
-                  <Image
-                    src={item.imageData}
-                    height={80}
-                    width={80}
-                    alt="item"
-                    // className="rounded-l-xl"
-                  />
-                )}
-                <div className="p-4">
-                  <p className="text-xl">{item.name}</p>
-                </div>
-              </div>
-              <Button
-                color="light"
-                className="m-0 flex items-center border-0 bg-transparent"
-                onClick={() => addItem(item.id)}
-                outlined
-              >
-                <TrashIcon className="h-8 w-8 text-red-500" />
-              </Button>
-            </div>
+            <ContainerItemRow key={item.id} item={item} onDelete={deleteItem} />
           );
         })}
       </div>
