@@ -1,4 +1,5 @@
 import { ArrowLeftCircleIcon, QrCodeIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -27,7 +28,20 @@ export const MobileNavHeader: React.FC<MobileNavHeaderProps> = ({
           onClick={back}
         />
       )}
-      <p className="text-2xl font-bold">{title}</p>
+
+      <div className="flex items-center">
+        {!canGoBack && (
+          <Image
+            src={"/warehouse.png"}
+            height={40}
+            width={40}
+            className="p-2"
+            alt="logo"
+          />
+        )}
+        <p className="text-2xl font-bold">{title}</p>
+      </div>
+
       {showScan && (
         <Link href={"/containers/scan"}>
           <button className="flex items-center justify-center gap-2 self-end rounded-xl border border-blue-600 p-2 text-blue-600">
