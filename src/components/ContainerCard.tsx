@@ -21,8 +21,12 @@ interface ContainerCardProps {
 
 export const ContainerCard: React.FC<ContainerCardProps> = ({ container }) => {
   return (
-    <Link key={container.id} href={`/containers/${container.id}`}>
-      <div className="max-w-lg overflow-hidden rounded shadow-lg">
+    <div className="max-w-lg overflow-hidden rounded shadow-lg">
+      <Link
+        key={container.id}
+        href={`/containers/${container.id}`}
+        className="max-w-fit"
+      >
         <div className="flex items-center gap-4 p-8">
           <div className="flex w-1/2 items-center justify-center">
             <Image
@@ -48,7 +52,7 @@ export const ContainerCard: React.FC<ContainerCardProps> = ({ container }) => {
             </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
