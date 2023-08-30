@@ -13,42 +13,45 @@ export const ContainerItemRow: React.FC<ContainerItemRowProps> = ({
   item,
   onDelete,
 }) => {
+  console.log(item.createdAt);
   return (
     <>
       <div
         className="flex justify-between rounded-xl p-4 shadow-md"
         key={item.id}
       >
-        <div className="flex">
+        <div className="flex w-full items-center justify-center gap-4">
           {item.imageData && (
             <Image
               src={item.imageData}
               height={80}
               width={80}
               alt="item"
-              // className="rounded-l-xl"
+              className="rounded-xl"
             />
           )}
-          <div className="p-4">
+          <div className="w-full">
             <p className="text-xl">{item.name}</p>
+            <p className="text-gray-400">
+              Added: {item.createdAt.toLocaleDateString("en-US")}
+            </p>
           </div>
         </div>
-        {onDelete && (
-          <Button
-            color="light"
-            className="m-0 flex items-center border-0 bg-transparent"
-            onClick={() =>
-              onDelete
-                ? onDelete(item.id)
-                : () => {
-                    null;
-                  }
-            }
-            outlined
-          >
-            <TrashIcon className="h-8 w-8 text-red-500" />
-          </Button>
-        )}
+        <div className="justify-center">
+          {onDelete && (
+            <TrashIcon
+              className="h-8 w-8 text-red-500"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={() =>
+                onDelete
+                  ? onDelete(item.id)
+                  : () => {
+                      null;
+                    }
+              }
+            />
+          )}
+        </div>
       </div>
     </>
   );
