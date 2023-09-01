@@ -38,7 +38,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center">
-          <Link href={"/containers/list"}>
+          <Link href={"/containers"}>
             <Button className="max-w-full">View My Containers</Button>
           </Link>
         </div>
