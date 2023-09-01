@@ -46,7 +46,10 @@ export const Container: React.FC = ({}) => {
       <MobileNavHeader title={data?.name ?? ""} />
       <div className="flex items-center justify-center p-2">
         <div className="flex flex-col gap-2">
-          <QRCode size={150} value={`/containers/${id?.toString()}`} />
+          <QRCode
+            size={150}
+            value={`${window.location.origin}/containers/${id?.toString()}`}
+          />
           <button
             onClick={handlePrint}
             className="flex gap-2 rounded-xl bg-green-700 p-2 text-white shadow-md"
@@ -76,7 +79,7 @@ export const Container: React.FC = ({}) => {
           <QRCode
             size={256}
             style={{ height: "auto", width: "100%" }}
-            value={`/containers/${id?.toString()}`}
+            value={`${window.location.origin}/containers/${id?.toString()}`}
             viewBox={`0 0 256 256`}
           />
           <div className="flex items-center p-4">
