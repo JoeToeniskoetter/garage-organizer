@@ -8,14 +8,18 @@ interface ContainerCardProps {
       id: string;
       name: string;
       imageData: string | null;
-      containerId: number;
+      containerId: string;
       deletedAt: Date | null;
+      createdAt: Date;
     }[];
   } & {
-    id: number;
+    id: string;
+    number: number;
     name: string;
     type: string;
     userId: string;
+    deletedAt: Date | null;
+    createdAt: Date;
   };
 }
 

@@ -21,14 +21,14 @@ export const ContainerById: React.FC = ({}) => {
     query: { id },
   } = useRouter();
   const { data, isLoading } = api.container.byId.useQuery(
-    { id: Number(id) },
+    { id: id as string },
     { enabled: id !== undefined }
   );
   const { mutateAsync } = api.containerItem.delete.useMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries([
         ["container", "byId"],
-        { input: { id: Number(id) }, type: "query" },
+        { input: { id: id }, type: "query" },
       ]);
     },
   });
@@ -104,7 +104,7 @@ export const ContainerById: React.FC = ({}) => {
             viewBox={`0 0 256 256`}
           />
           <div className="flex items-center p-4">
-            <p className="text-6xl font-bold">Container #{data?.id}</p>
+            <p className="text-6xl font-bold">Container #{data?.number}</p>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ export const ContainerById: React.FC = ({}) => {
           onClose={() => {
             setOpenModal(false);
           }}
-          containerId={Number(id)}
+          containerId={id as string}
         />
       )}
       <Modal

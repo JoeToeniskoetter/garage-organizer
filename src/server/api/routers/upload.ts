@@ -5,7 +5,7 @@ import { env } from "~/env.mjs";
 
 export const uploadRouter = createTRPCRouter({
   getPresignedUrl: protectedProcedure
-    .input(z.object({ ext: z.string(), containerId: z.number() }))
+    .input(z.object({ ext: z.string(), containerId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const key = `containers/${ctx.session.user.id}/${
         input.containerId

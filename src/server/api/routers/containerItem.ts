@@ -17,7 +17,7 @@ export const containerItemRouter = createTRPCRouter({
       z.object({
         name: z.string().nonempty(),
         imageData: z.string().optional(),
-        containerId: z.number(),
+        containerId: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {

@@ -67,7 +67,8 @@ model VerificationToken {
 }
 
 model Container {
-    id        Int             @id @default(autoincrement())
+    id        String          @id @default(cuid())
+    number    Int
     name      String
     items     ContainerItem[]
     type      String          @default("cardboard")
@@ -81,7 +82,7 @@ model ContainerItem {
     id          String    @id @default(cuid())
     name        String
     imageData   String?
-    containerId Int
+    containerId String
     container   Container @relation(fields: [containerId], references: [id])
     deletedAt   DateTime?
     createdAt   DateTime  @default(now())

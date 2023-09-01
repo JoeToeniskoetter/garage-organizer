@@ -10,7 +10,7 @@ export const containerRouter = createTRPCRouter({
     });
   }),
   byId: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const container = await ctx.prisma.container.findFirst({
         where: { id: input.id, userId: ctx.session.user.id, deletedAt: null },
@@ -41,15 +41,24 @@ export const containerRouter = createTRPCRouter({
       z.object({ name: z.string().nonempty(), type: z.string().nonempty() })
     )
     .mutation(async ({ input, ctx }) => {
+      const currentNumber = await ctx.prisma.container.aggregate({
+        where: { userId: ctx.session.user.id, deletedAt: null },
+        _max: { number: true },
+      });
+      console.log(currentNumber);
       return await ctx.prisma.container.create({
         data: {
           ...input,
+          number:
+            currentNumber._max.number !== null
+              ? currentNumber._max.number + 1
+              : 1,
           user: { connect: { id: ctx.session.user.id } },
         },
       });
     }),
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       return await ctx.prisma.container.update({
         data: { deletedAt: new Date() },

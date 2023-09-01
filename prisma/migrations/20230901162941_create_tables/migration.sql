@@ -55,9 +55,12 @@ CREATE TABLE "VerificationToken" (
 
 -- CreateTable
 CREATE TABLE "Container" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL DEFAULT 'cardboard',
+    "userId" TEXT NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Container_pkey" PRIMARY KEY ("id")
 );
@@ -67,7 +70,9 @@ CREATE TABLE "ContainerItem" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "imageData" TEXT,
-    "containerId" INTEGER NOT NULL,
+    "containerId" TEXT NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ContainerItem_pkey" PRIMARY KEY ("id")
 );
@@ -92,6 +97,9 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Container" ADD CONSTRAINT "Container_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ContainerItem" ADD CONSTRAINT "ContainerItem_containerId_fkey" FOREIGN KEY ("containerId") REFERENCES "Container"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -9,7 +9,7 @@ import Resizer from "react-image-file-resizer";
 interface AddContainerItemModalProps {
   open: boolean;
   onClose: () => void;
-  containerId: number;
+  containerId: string;
 }
 
 function getFileExtension(fileName: string) {
@@ -35,7 +35,7 @@ export const AddContainerItemModal: React.FC<AddContainerItemModalProps> = ({
   } = useForm<{
     name: string;
     imageData?: File;
-    containerId: number;
+    containerId: string;
   }>({ defaultValues: { containerId } });
 
   const queryClient = useQueryClient();
@@ -67,7 +67,7 @@ export const AddContainerItemModal: React.FC<AddContainerItemModalProps> = ({
     });
 
   const createItem = async (values: {
-    containerId: number;
+    containerId: string;
     imageData?: File;
     name: string;
   }) => {
