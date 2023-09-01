@@ -67,12 +67,14 @@ model VerificationToken {
 }
 
 model Container {
-    id     Int             @id @default(autoincrement())
-    name   String
-    items  ContainerItem[]
-    type   String          @default("cardboard")
-    userId String
-    user   User            @relation(fields: [userId], references: [id])
+    id        Int             @id @default(autoincrement())
+    name      String
+    items     ContainerItem[]
+    type      String          @default("cardboard")
+    userId    String
+    user      User            @relation(fields: [userId], references: [id])
+    deletedAt DateTime?
+    createdAt DateTime        @default(now())
 }
 
 model ContainerItem {

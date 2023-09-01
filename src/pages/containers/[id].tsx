@@ -1,18 +1,22 @@
+import { PrinterIcon, TrashIcon } from "@heroicons/react/24/outline";
+
+import type { Container } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button, Modal, Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import { useReactToPrint } from "react-to-print";
-import { api } from "~/utils/api";
-import { MobileNavHeader } from "../../components/MobileNavHeader";
-import { AddContainerItemModal } from "../../components/AddContainerItemModal";
-import { useQueryClient } from "@tanstack/react-query";
 import { ContainerItemRow } from "~/components/ContainerItemRow";
-import { Spinner } from "flowbite-react";
-import { PrinterIcon } from "@heroicons/react/24/outline";
+import { api } from "~/utils/api";
+import { AddContainerItemModal } from "../../components/AddContainerItemModal";
+import { MobileNavHeader } from "../../components/MobileNavHeader";
 
-export const Container: React.FC = ({}) => {
+export const ContainerById: React.FC = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [containerToDelete, setContainerToDelete] = useState<Container>();
   const queryClient = useQueryClient();
+  const router = useRouter();
   const {
     query: { id },
   } = useRouter();
@@ -26,6 +30,11 @@ export const Container: React.FC = ({}) => {
         ["container", "byId"],
         { input: { id: Number(id) }, type: "query" },
       ]);
+    },
+  });
+  const { mutateAsync: deleteContainer } = api.container.delete.useMutation({
+    onSuccess: () => {
+      router.back();
     },
   });
 
@@ -43,7 +52,19 @@ export const Container: React.FC = ({}) => {
   }
   return (
     <div className="m-4">
-      <MobileNavHeader title={data?.name ?? ""} />
+      <MobileNavHeader
+        title={data?.name ?? ""}
+        trailingAction={
+          <Button
+            color="red"
+            className="flex items-center"
+            onClick={() => setContainerToDelete(data as Container)}
+          >
+            <TrashIcon className="h-5 w-5 text-red-400" />
+            <p className="font-bold text-red-400">Delete</p>
+          </Button>
+        }
+      />
       <div className="flex items-center justify-center p-2">
         <div className="flex flex-col gap-2">
           <QRCode
@@ -96,8 +117,34 @@ export const Container: React.FC = ({}) => {
           containerId={Number(id)}
         />
       )}
+      <Modal
+        show={containerToDelete !== undefined}
+        onClose={() => setContainerToDelete(undefined)}
+      >
+        <Modal.Header>
+          <p>Delete {containerToDelete?.name}?</p>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this contianer?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="light" onClick={() => setContainerToDelete(undefined)}>
+            Close
+          </Button>
+          <Button
+            color="red"
+            onClick={async () => {
+              if (containerToDelete) {
+                await deleteContainer({ id: containerToDelete.id });
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
-export default Container;
+export default ContainerById;

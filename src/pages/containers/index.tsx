@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { api } from "~/utils/api";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { HiSearch } from "react-icons/hi";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import {
+  ExclamationTriangleIcon,
+  QrCodeIcon,
+} from "@heroicons/react/24/outline";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { Spinner, TextInput } from "flowbite-react";
 import { ContainerCard } from "~/components/ContainerCard";
@@ -23,7 +26,18 @@ export const List: React.FC = ({}) => {
   return (
     <>
       <div className="m-4 flex flex-col">
-        <MobileNavHeader title="My Containers" canGoBack={false} showScan />
+        <MobileNavHeader
+          title="My Containers"
+          canGoBack={false}
+          trailingAction={
+            <Link href={"/containers/scan"}>
+              <button className="flex items-center justify-center gap-2 self-end rounded-xl border border-blue-600 p-2 text-blue-600">
+                <QrCodeIcon className="h-5 w-5" />
+                Scan
+              </button>
+            </Link>
+          }
+        />
         <TextInput
           value={searchTerm}
           className="flex w-full min-w-full"

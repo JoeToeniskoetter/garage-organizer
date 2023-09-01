@@ -1,8 +1,7 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { MobileNavHeader } from "../../components/MobileNavHeader";
 import { AddContainerForm } from "../../components/AddContainerForm";
 
-export default function addPage() {
+export default function AddPage() {
   return (
     <div>
       <MobileNavHeader title="Add Container" />

@@ -5,7 +5,7 @@ import { env } from "~/env.mjs";
 export const containerRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.container.findMany({
-      where: { userId: ctx.session.user.id },
+      where: { userId: ctx.session.user.id, deletedAt: null },
       include: { items: { where: { deletedAt: null } } },
     });
   }),
@@ -13,7 +13,7 @@ export const containerRouter = createTRPCRouter({
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
       const container = await ctx.prisma.container.findFirst({
-        where: { id: input.id, userId: ctx.session.user.id },
+        where: { id: input.id, userId: ctx.session.user.id, deletedAt: null },
         include: { items: { where: { deletedAt: null } } },
       });
 
@@ -41,18 +41,19 @@ export const containerRouter = createTRPCRouter({
       z.object({ name: z.string().nonempty(), type: z.string().nonempty() })
     )
     .mutation(async ({ input, ctx }) => {
-      const maxContainerNumber = await ctx.prisma.container.aggregate({
-        _max: { id: true },
-      });
       return await ctx.prisma.container.create({
-        data: { ...input, userId: ctx.session.user.id },
+        data: {
+          ...input,
+          user: { connect: { id: ctx.session.user.id } },
+        },
       });
     }),
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input, ctx }) => {
-      return await ctx.prisma.container.delete({
-        where: { id: input.id },
+      return await ctx.prisma.container.update({
+        data: { deletedAt: new Date() },
+        where: { id: input.id, userId: ctx.session.user.id },
       });
     }),
 });

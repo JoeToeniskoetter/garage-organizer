@@ -1,6 +1,5 @@
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { ContainerItem } from "@prisma/client";
-import { Button } from "flowbite-react";
 import React from "react";
 import Image from "next/image";
 
@@ -13,7 +12,6 @@ export const ContainerItemRow: React.FC<ContainerItemRowProps> = ({
   item,
   onDelete,
 }) => {
-  console.log(item.createdAt);
   return (
     <>
       <div
