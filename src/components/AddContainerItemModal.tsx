@@ -101,7 +101,11 @@ export const AddContainerItemModal: React.FC<AddContainerItemModalProps> = ({
     } catch (e: unknown) {
       alert("Failed to create item");
     } finally {
-      reset({ name: "", imageData: undefined, containerId: containerId });
+      resetField("imageData");
+      resetField("name");
+      if (inputRef.current) {
+        inputRef.current.files = null;
+      }
       onClose();
       setCreating(false);
     }
@@ -156,7 +160,7 @@ export const AddContainerItemModal: React.FC<AddContainerItemModalProps> = ({
         />
         {imageSrc && (
           <div className="m-2 flex max-w-fit rounded-xl border-2 p-2">
-            <img src={URL.createObjectURL(imageSrc)} width={50} height={50} />
+            <img src={URL.createObjectURL(imageSrc)} width={120} height={120} />
             <strong className="relative inline-flex items-center rounded text-xs font-medium">
               <span className="items absolute -right-4 -top-4 flex h-5 w-5 items-center justify-center rounded-full">
                 <TrashIcon

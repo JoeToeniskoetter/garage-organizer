@@ -99,12 +99,12 @@ export const ContainerById: React.FC = ({}) => {
         <div ref={componentRef}>
           <QRCode
             size={256}
-            style={{ height: "auto", width: "100%" }}
+            style={{ height: "300px", width: "100%", paddingTop: "20px" }}
             value={`${window.location.origin}/containers/${id?.toString()}`}
             viewBox={`0 0 256 256`}
           />
-          <div className="flex items-center p-4">
-            <p className="text-6xl font-bold">Container #{data?.number}</p>
+          <div className="flex items-center justify-center p-4">
+            <p className="text-3xl font-bold">Container #{data?.number}</p>
           </div>
         </div>
       </div>
